@@ -38,12 +38,12 @@ class Game:
             print("\nIt is " + player.name + "'s turn:")
             print('Your hand is: {}. The dealer is showing: {}'.format(player.hand, self.dealer.hand[0]))
 
-        while (not player.bust and not player.blackjack):
+        while (not player.hand.bust and not player.hand.blackjack):
          
             if player.auto:
                 choices = ['h', 's']
                 #choice = random.choice(choices) # player chooses randomly
-                if player.score < 17: # player hits when score < 17
+                if player.hand.score < 17: # player hits when score < 17
                     choice = 'h'
                 else:
                     choice = 's'
@@ -58,9 +58,9 @@ class Game:
                 break
         
         if self.verbose:
-            if player.bust:
+            if player.hand.bust:
                 print("{} is bust!".format(player.name))
-            elif player.blackjack:
+            elif player.hand.blackjack:
                 print("{} has blackjack!".format(player.name)) 
             
     def dealer_turn(self):
@@ -69,7 +69,7 @@ class Game:
         if self.verbose:
             print("\nThe dealer's hand is:", self.dealer.hand)
     
-        while not self.dealer.bust and self.dealer.score < 17:
+        while not self.dealer.hand.bust and self.dealer.hand.score < 17:
             #print('Dealer hits')
             self.dealer.hit(self.deck)
             if self.verbose:
@@ -81,8 +81,8 @@ class Game:
         
         winners = []
         for player in self.players:
-
-            if (player.score > self.dealer.score and player.score <= 21) or (self.dealer.score > 21 and player.score <= 21):
-                winners.append(player.name)
+            for hand in player.hands:
+                if (hand.score > self.dealer.hand.score and hand.score <= 21) or (self.dealer.hand.score > 21 and hand.score <= 21):
+                    winners.append(player.name)
             
         return winners

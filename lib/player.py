@@ -1,5 +1,6 @@
 import numpy as np
 from .deck import Deck
+from .hand import Hand
 
 class Player:
     def __init__(self, name, auto=True):
@@ -7,64 +8,37 @@ class Player:
         '''Creates a Blackjack Player (also used for the dealer)'''
         
         self.name = name
-        self.hand = []
+        self.hands = [[]]
         self.auto = auto
-            
+        self.i = 0 # the current hand index
+        
+        
     def deal(self, deck):
         # deals cards to the player
-        self.hand = deck.deal(2)
+        self.hands[self.i] = Hand(deck.deal(2))
  
     def hit(self, deck):
         # deals one additional card to the player
-        self.hand.append(deck.deal(1)[0])
+        self.hand.add_card(deck.deal(1)[0])
     
     def stick(self):
         pass
 
-    @property
-    def score(self):
-        # player score
-        face_cards = ['J', 'Q', 'K']
-        score = 0
-        n_aces = 0
+    def split(self):
+        pass
 
-        # initial parse
-        for card in self.hand:
-            if card == 'A':
-                n_aces += 1
-            elif card in face_cards:
-                score += 10
-            else:
-                score += int(card)
-                
-        # handle the aces
-        for i in range(n_aces):
-            if score <= 10:
-                score += 11
-            else:
-                score += 1
-                
-        return score
-                
     @property
-    def bust(self):
-        # player is bust
-        if self.score > 21:
-            return True
-        return False
-    
-    @property
-    def blackjack(self):
-        # player has blackjack
-        if self.score == 21:
-            return True
-        return False
+    def hand(self):
+        # returns a pointer to the current hand
+        return self.hands[self.i] 
+
 
     def __str__(self):
         string = "Player " + self.name + ":" + '\n'
-        string += "hand =" + str(self.hand) + '\n' 
-        string += "score = " + str(self.score) + '\n' 
-        string += "blackjack = " + str(self.blackjack) + '\n' 
-        string += "bust = " + str(self.bust) + '\n'
+        for hand in self.hands:
+            string += "hand =" + str(hand.cards) + '\n' 
+            string += "score = " + str(hand.score) + '\n' 
+            string += "blackjack = " + str(hand.blackjack) + '\n' 
+            string += "bust = " + str(hand.bust) + '\n'
         return string
 
