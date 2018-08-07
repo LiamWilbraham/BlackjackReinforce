@@ -37,25 +37,8 @@ class Game:
         if self.verbose:
             print("\nIt is " + player.name + "'s turn:")
             print('Your hand is: {}. The dealer is showing: {}'.format(player.hand, self.dealer.hand[0]))
-
-        while (not player.hand.bust and not player.hand.blackjack):
-         
-            if player.auto:
-                choices = ['h', 's']
-                #choice = random.choice(choices) # player chooses randomly
-                if player.hand.score < 17: # player hits when score < 17
-                    choice = 'h'
-                else:
-                    choice = 's'
-            else:
-                choice = input('Would you like to hit or stick? (h/s)')
-        
-            if choice == 'h':
-                player.hit(self.deck)
-                if self.verbose:
-                    print('Your hand is:', player.hand)
-            if choice == 's':
-                break
+     
+        self.player_hit_or_stick(player)
         
         if self.verbose:
             if player.hand.bust:
@@ -74,6 +57,33 @@ class Game:
             self.dealer.hit(self.deck)
             if self.verbose:
                 print("The dealer's hand is:", self.dealer.hand)
+
+    def player_hit_or_stick(self, player):
+        
+        while (not player.hand.bust and not player.hand.blackjack):
+            
+            if player.auto:
+                choices = ['h', 's']
+                if player.hand.score < 17: # player hits when score < 17
+                    choice = 'h'
+                else:
+                    choice = 's'
+            else:
+                choice = input('Would you like to hit or stick? (h/s)')
+
+            if choice == 'h':
+                player.hit(self.deck)
+            if self.verbose:
+                print('Your hand is:', player.hand)
+            if choice == 's':
+                break
+
+    @property
+    def can_split(hand):
+        # decide if a hand can be split
+        if hand.card[0] == hand.card[1]:
+            return True
+        return False
 
     @property
     def winner(self):

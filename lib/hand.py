@@ -41,7 +41,7 @@ class Hand:
     @property
     def blackjack(self):
         # blackjack hand
-        if self.score == 21 and len(this.cards == 2):
+        if self.score == 21 and len(self.cards) == 2:
             return True
         return False
 
