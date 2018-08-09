@@ -8,30 +8,25 @@ class Player:
         '''Creates a Blackjack Player (also used for the dealer)'''
         
         self.name = name
-        self.hands = [[]]
+        self.hands = []
         self.auto = auto
-        self.i = 0 # the current hand index
         
         
     def deal(self, deck):
         # deals cards to the player
-        self.hands[self.i] = Hand(deck.deal(2))
- 
-    def hit(self, deck):
-        # deals one additional card to the player
-        self.hand.add_card(deck.deal(1)[0])
-    
-    def stick(self):
-        pass
+        self.hands = [Hand(deck.deal(2))]
 
-    def split(self):
-        pass
+        
+    def split(self, deck):
+        self.hands = [Hand([self.hands[0].cards[0]]), Hand([self.hands[0].cards[1]])]
+        self.hands[0].hit(deck)
+        self.hands[1].hit(deck)
+        
 
     @property
     def hand(self):
-        # returns a pointer to the current hand
-        return self.hands[self.i] 
-
+        # return a pointer to the player's first hand (might be the only one)
+        return self.hands[0]
 
     def __str__(self):
         string = "Player " + self.name + ":" + '\n'
