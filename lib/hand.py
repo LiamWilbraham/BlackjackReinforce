@@ -1,7 +1,9 @@
 class Hand:
     def __init__(self, cards):
-    	self.cards = cards
+        self.cards = cards
+        self.bet = 0.0
         
+
     def hit(self, deck):
         # deals one additional card to the player
         self.cards.append(deck.deal(1)[0])

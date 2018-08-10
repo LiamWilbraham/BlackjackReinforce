@@ -2,7 +2,7 @@ from .deck import Deck
 from .player import Player
 
 class Game:
-    def __init__(self, player_names, verbose):
+    def __init__(self, player_names, verbose, debug=False):
         
         '''Game class for initialising and playing games'''
         
@@ -10,14 +10,25 @@ class Game:
         self.players = [Player(name, auto) for name, auto in player_names.items()]
         self.dealer = Player('Dealer', True)
         self.verbose = verbose
+        self.debug = debug
         
     def play(self):
-        # deal cards to players and dealer
         
+        # deal cards to players and dealer
         for player in self.players:
             player.deal(self.deck)
+            if self.debug:
+                print(player)
         self.dealer.deal(self.deck)
-        
+        if self.debug:
+            print(self.dealer)
+            
+        # place the bets
+        for player in self.players:
+            self.player_bet(player)
+            if self.debug:
+                print(player)
+            
         # play the game
         for player in self.players:
             self.player_turn(player)
@@ -40,6 +51,9 @@ class Game:
 
         if self.can_split(player.hand):
             self.player_split_or_stick(player)
+            if self.debug:
+                print(player)
+            
             if self.verbose:
                 player_hands_str = ''
                 for hand in player.hands:
@@ -67,6 +81,31 @@ class Game:
             self.dealer.hand.hit(self.deck)
             if self.verbose:
                 print("The dealer's hand is:", self.dealer.hand)
+
+                
+    def player_bet(self, player):
+        # place a player bet on the dealt hand
+
+        if player.auto:
+            bet = 10.0
+            if self.verbose:
+                print("{}'s hand is {}".format(player.name, player.hand)) 
+                print('{} bets {}'.format(player.name, bet))
+        else:
+            if self.verbose:
+                print("\nIt is " + player.name + "'s turn:")
+                print('Your hand is: {}. The dealer is showing: {}'.format(player.hand, self.dealer.hand[0]))
+            while True:
+                try:
+                    bet = float(input('How much would you like to bet? '))
+                except ValueError:
+                    print('Invalid input')
+                    continue
+                if self.verbose:
+                    print()
+                break
+        player.bet(bet)
+                
 
 
     def player_split_or_stick(self, player):
