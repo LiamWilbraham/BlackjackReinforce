@@ -11,6 +11,9 @@ class Player:
         self.hands = []
         self.auto = auto
         self.wallet = 0.0
+        self.n_hands_played = 0
+        self.n_hands_won = 0
+        self.n_hands_drawn = 0
         
         
     def deal(self, deck):
@@ -31,14 +34,34 @@ class Player:
         self.wallet -= orig_bet
         self.hands[0].hit(deck)
         self.hands[1].hit(deck)
+
         
+    def collect_winnings(self):
+        for hand in self.hands:
+            if hand.wins:
+                if hand.blackjack:
+                    self.wallet += 2.5*hand.bet
+                else:
+                    self.wallet += 2.0*hand.bet
+            elif hand.draws:
+                self.wallet += hand.bet
+                        
 
     @property
     def hand(self):
         # return a pointer to the player's first hand (might be the only one)
         return self.hands[0]
 
+
+    @property
+    def win_rate(self):
+        if self.n_hands_played > 0:
+            return self.n_hands_won*100/self.n_hands_played
+        return 0.0
+
+    
     def __str__(self):
+        # return a detailed breakdown of the players hands as a string
         string = "Player " + self.name + ":" + '\n'
         string += "wallet = " + str(self.wallet) + '\n'
         for hand in self.hands:
@@ -49,3 +72,13 @@ class Player:
             string += "bust = " + str(hand.bust) + '\n'
         return string
 
+
+    def stats(self):
+        # returns the player statistics as a string
+        string = "Player " + self.name + " stats:" + '\n'
+        string += "hands player = " + str(self.n_hands_played) + '\n'
+        string += "hands won = " + str(self.n_hands_won) + '\n'
+        string += "hands lost = " + str(self.n_hands_player - self.n_hands_drawn) + '\n'
+        string += "hands drawn = " + str(self.n_hands_drawn) + '\n'
+        string += "win rate = " + str(self.win_rate) + '%\n'
+        return string

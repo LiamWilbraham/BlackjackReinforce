@@ -2,7 +2,8 @@ class Hand:
     def __init__(self, cards):
         self.cards = cards
         self.bet = 0.0
-        
+        self.wins = False
+        self.draws = False
 
     def hit(self, deck):
         # deals one additional card to the player

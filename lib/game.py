@@ -33,14 +33,10 @@ class Game:
         for player in self.players:
             self.player_turn(player)
         self.dealer_turn()
+
         
-        winners = self.winner
-        
-        if self.verbose:
-            if len(winners) > 0:
-                print(*winners, 'won!')
-            else:
-                print('no winners here!')
+        # decide who wins, losses and move cash as required
+        self.finalise()
         
     def player_turn(self, player):
         # plays a turn for a player
@@ -162,14 +158,46 @@ class Game:
         return False
 
     
-    @property
-    def winner(self):
-        # determine if any players beat the dealer
+    def finalise(self):
+        # determine if any players beat the dealer and update the relevant player properties
         
-        winners = []
         for player in self.players:
-            for hand in player.hands:
-                if (hand.score > self.dealer.hand.score and hand.score <= 21) or (self.dealer.hand.score > 21 and hand.score <= 21):
-                    winners.append(player.name)
-            
-        return winners
+            for i, hand in enumerate(player.hands):
+                if hand.bust:
+                    # player losses regardless of dealers hand
+                    status = 'loss'
+                elif not self.dealer.hand.bust and hand.score < self.dealer.hand.score:
+                    # delear is not bust, and has a better hand than the player
+                    status = 'loss'
+                elif self.dealer.hand.bust or hand.score > self.dealer.hand.score:
+                    # player wins with a higher hand than dealer, or dealer is bust (but not player)
+                    status = 'win'
+                elif hand.blackjack and not self.dealer.hand.blackjack:
+                    # player has blackjack but not the dealer
+                    status = 'win'
+                elif hand.blackjack and self.dealer.hand.blackjack:
+                    # player and dealer both have blackjack
+                    status = 'draw'
+                elif hand.score == self.dealer.hand.score:
+                    # player and dealer don't have blackjack, but have hands of equal value
+                    status = 'draw'
+
+                # update the attributes
+                player.n_hands_played += 1
+                if status == 'win':
+                    player.n_hands_won += 1
+                    hand.wins = True
+                    if self.verbose:
+                        print("{}'s hand {} beats the dealer.".format(str(player.name), str(i)))
+                elif status == 'draw':
+                    player.n_hands_drawn += 1
+                    hand.draws = True
+                    if self.verbose:
+                        print("{}'s hand {} draws against the dealer.".format(str(player.name), str(i)))
+                else:
+                    if self.verbose:
+                        print("{}'s hand {} looses against the dealer.".format(str(player.name), str(i)))
+                
+            # collect any winnngs
+            player.collect_winnings()    
+
