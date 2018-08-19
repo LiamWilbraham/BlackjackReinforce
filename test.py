@@ -35,3 +35,9 @@ print('Game test:')
 print('-------------------------------------------------')
 game = Game({'Rick' : True, 'Morty' : True}, verbose=True)
 game.play()
+
+from lib.strategies import *
+
+dealer_card = '6'
+player_card = '12'
+print(basic['Hard Total'][dealer_card][player_card])
