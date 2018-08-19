@@ -42,14 +42,14 @@ class Game:
         self.finalise()
 
 
-    def player_turn(self, player):   ##### should this be moved to manual/auto player too? Not sure.
+    def player_turn(self, player):
         # plays a turn for a player
 
         if self.verbose:
             print("\nIt is " + player.name + "'s turn:")
             print('Your hand is: {}. The dealer is showing: {}'.format(player.hand, self.dealer.hand[0]))
 
-        if self.can_split(player.hand):
+        if player.can_split(player.hand):
             player.player_split_or_stick(self.deck)
             if self.debug:
                 print(player)
@@ -81,13 +81,6 @@ class Game:
             self.dealer.hand.hit(self.deck)
             if self.verbose:
                 print("The dealer's hand is:", self.dealer.hand)
-
-
-    def can_split(self, hand):
-        # decide if a hand can be split
-        if hand.cards[0] == hand.cards[1]:
-            return True
-        return False
 
 
     def finalise(self):

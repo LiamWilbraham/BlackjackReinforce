@@ -27,6 +27,13 @@ class BasePlayer:
         self.wallet -= amount
 
 
+    def can_split(self, hand):
+        # decide if a hand can be split
+        if hand.cards[0] == hand.cards[1]:
+            return True
+        return False
+
+
     def split(self, deck):
         orig_bet = self.hands[0].bet
         self.hands = [Hand([self.hands[0].cards[0]]), Hand([self.hands[0].cards[1]])]
