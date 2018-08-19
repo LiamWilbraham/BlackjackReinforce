@@ -1,3 +1,4 @@
 from .game import Game
 from .deck import Deck
-from .player import Player
+from .manualplayer import ManualPlayer
+from .autoplayer import AutoPlayer

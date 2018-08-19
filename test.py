@@ -1,22 +1,30 @@
-from lib import Player, Deck, Game
+from lib import ManualPlayer, AutoPlayer, Deck, Game
 
 # simple player test
 print('-------------------------------------------------')
 print('Player test')
 print('-------------------------------------------------')
 deck = Deck()
-player = Player('Summer')
-player.deal(deck)
-print(player)
-player.hand.hit(deck)
-print(player)
+
+man_player = ManualPlayer('Summer', True)
+man_player.deal(deck)
+print(man_player)
+man_player.hand.hit(deck)
+print(man_player)
+
+auto_player = AutoPlayer('RoboSummer', True)
+auto_player.deal(deck)
+print(auto_player)
+auto_player.hand.hit(deck)
+print(auto_player)
 
 
 # test splitting mechanism
 print('-------------------------------------------------')
 print('Splitting test')
 print('-------------------------------------------------')
-game = Game({'Rick' : False, 'Morty' : True}, verbose=True, debug=True)
+game = Game({'Rick' : True, 'Morty' : True}, verbose=True, debug=True)
+game = Game({'Rick' : True, 'Morty' : True}, verbose=True, debug=True)
 game.deck.cards = ['10', '10', '8', '8', 'J', '5']  + game.deck.cards
 game.play()
 
@@ -25,5 +33,5 @@ game.play()
 print('-------------------------------------------------')
 print('Game test:')
 print('-------------------------------------------------')
-game = Game({'Rick' : False, 'Morty' : True}, verbose=True)
+game = Game({'Rick' : True, 'Morty' : True}, verbose=True)
 game.play()
