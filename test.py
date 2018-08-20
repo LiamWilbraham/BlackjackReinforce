@@ -38,6 +38,9 @@ game.play()
 
 from lib.strategies import *
 
+print('-------------------------------------------------')
+print('Strategy test:')
+print('-------------------------------------------------')
 dealer_card = '6'
 player_card = '12'
 print(basic['Hard Total'][dealer_card][player_card])

@@ -1,6 +1,7 @@
 from .deck import Deck
 from .manualplayer import ManualPlayer
 from .autoplayer import AutoPlayer
+from .dealer import Dealer
 
 class Game:
     def __init__(self, player_names, verbose, debug=False):
@@ -9,7 +10,7 @@ class Game:
 
         self.deck = Deck()
         self.players = [AutoPlayer(name, verbose) for name, verbose in player_names.items()]
-        self.dealer = AutoPlayer('Dealer', False)
+        self.dealer = Dealer(False)
         self.verbose = verbose
         self.debug = debug
 
@@ -75,12 +76,8 @@ class Game:
 
         if self.verbose:
             print("\nThe dealer's hand is:", self.dealer.hand)
-
-        while not self.dealer.hand.bust and self.dealer.hand.score < 17:
-            #print('Dealer hits')
-            self.dealer.hand.hit(self.deck)
-            if self.verbose:
-                print("The dealer's hand is:", self.dealer.hand)
+            
+        self.dealer.hit_or_stick(self.deck)
 
 
     def finalise(self):
