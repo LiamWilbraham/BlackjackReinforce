@@ -6,7 +6,7 @@ class ManualPlayer(BasePlayer):
             super(ManualPlayer, self).__init__(name, verbose)
 
 
-        def player_bet(self):
+        def place_bet(self):
             # place a player bet on the dealt hand
 
             while True:
@@ -18,10 +18,10 @@ class ManualPlayer(BasePlayer):
                 if self.verbose:
                     print()
                 break
-            self.bet(bet)
+            self._bet(bet)
 
 
-        def player_split_or_stick(self, deck):
+        def split_or_stick(self, deck):
             # see if player wishes to split their hand, if so then do it.
 
             split = False
@@ -34,10 +34,10 @@ class ManualPlayer(BasePlayer):
                     print("You must answer 'y' or 'n'")
 
             if split:
-                self.split(deck)
+                self._split(deck)
 
 
-        def player_hit_or_stick(self, deck):
+        def hit_or_stick(self, deck):
 
             for hand in self.hands:
 

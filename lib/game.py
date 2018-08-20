@@ -29,7 +29,7 @@ class Game:
             if self.verbose:
                 print("\nIt is " + player.name + "'s turn:")
                 print('Your hand is: {}. The dealer is showing: {}'.format(player.hand, self.dealer.hand[0]))
-            player.player_bet()
+            player.place_bet()
             if self.debug:
                 print(player)
 
@@ -50,7 +50,7 @@ class Game:
             print('Your hand is: {}. The dealer is showing: {}'.format(player.hand, self.dealer.hand[0]))
 
         if player.can_split(player.hand):
-            player.player_split_or_stick(self.deck)
+            player.split_or_stick(self.deck)
             if self.debug:
                 print(player)
 
@@ -60,7 +60,7 @@ class Game:
                     player_hands_str += str(hand) + ' '
                 print('Your hands are: {}. The dealer is showing: {}'.format(player_hands_str, self.dealer.hand[0]))
 
-        player.player_hit_or_stick(self.deck)
+        player.hit_or_stick(self.deck)
 
         if self.verbose:
             for hand in player.hands:

@@ -22,26 +22,11 @@ class BasePlayer:
         self.hands = [Hand(deck.deal(2))]
 
 
-    def bet(self, amount):
-        self.hands[0].bet = amount
-        self.wallet -= amount
-
-
     def can_split(self, hand):
         # decide if a hand can be split
         if hand.cards[0] == hand.cards[1]:
             return True
         return False
-
-
-    def split(self, deck):
-        orig_bet = self.hands[0].bet
-        self.hands = [Hand([self.hands[0].cards[0]]), Hand([self.hands[0].cards[1]])]
-        self.hands[0].bet = orig_bet
-        self.hands[1].bet = orig_bet
-        self.wallet -= orig_bet
-        self.hands[0].hit(deck)
-        self.hands[1].hit(deck)
 
 
     def collect_winnings(self):
@@ -66,8 +51,35 @@ class BasePlayer:
         if self.n_hands_played > 0:
             return self.n_hands_won*100/self.n_hands_played
         return 0.0
+    
 
+    def stats(self):
+        # returns the player statistics as a string
+        string = "Player " + self.name + " stats:" + '\n'
+        string += "hands player = " + str(self.n_hands_played) + '\n'
+        string += "hands won = " + str(self.n_hands_won) + '\n'
+        string += "hands lost = " + str(self.n_hands_player - self.n_hands_drawn) + '\n'
+        string += "hands drawn = " + str(self.n_hands_drawn) + '\n'
+        string += "win rate = " + str(self.win_rate) + '%\n'
+        return string
 
+    
+    # private methods
+    def _bet(self, amount):
+        self.hands[0].bet = amount
+        self.wallet -= amount
+
+        
+    def _split(self, deck):
+        orig_bet = self.hands[0].bet
+        self.hands = [Hand([self.hands[0].cards[0]]), Hand([self.hands[0].cards[1]])]
+        self.hands[0].bet = orig_bet
+        self.hands[1].bet = orig_bet
+        self.wallet -= orig_bet
+        self.hands[0].hit(deck)
+        self.hands[1].hit(deck)
+
+    # dunder methods
     def __str__(self):
         # return a detailed breakdown of the players hands as a string
         string = "Player " + self.name + ":" + '\n'
@@ -78,15 +90,4 @@ class BasePlayer:
             string += "bet = " + str(hand.bet) + ', '
             string += "blackjack = " + str(hand.blackjack) + ', '
             string += "bust = " + str(hand.bust) + '\n'
-        return string
-
-
-    def stats(self):
-        # returns the player statistics as a string
-        string = "Player " + self.name + " stats:" + '\n'
-        string += "hands player = " + str(self.n_hands_played) + '\n'
-        string += "hands won = " + str(self.n_hands_won) + '\n'
-        string += "hands lost = " + str(self.n_hands_player - self.n_hands_drawn) + '\n'
-        string += "hands drawn = " + str(self.n_hands_drawn) + '\n'
-        string += "win rate = " + str(self.win_rate) + '%\n'
         return string

@@ -6,7 +6,7 @@ class AutoPlayer(BasePlayer):
             super(AutoPlayer, self).__init__(name, verbose)
 
 
-        def player_bet(self):
+        def place_bet(self):
             # place a player bet on the dealt hand
 
             bet = 10.0
@@ -14,10 +14,10 @@ class AutoPlayer(BasePlayer):
                 print("{}'s hand is {}".format(self.name, self.hand))
                 print('{} bets {}'.format(self.name, bet))
 
-            self.bet(bet)
+            self._bet(bet)
 
 
-        def player_split_or_stick(self, deck):
+        def split_or_stick(self, deck):
             # see if player wishes to split their hand, if so then do it.
 
             split = False
@@ -25,10 +25,10 @@ class AutoPlayer(BasePlayer):
                 split = True
 
             if split:
-                self.split(deck)
+                self._split(deck)
 
 
-        def player_hit_or_stick(self, deck):
+        def hit_or_stick(self, deck):
 
             for hand in self.hands:
 
